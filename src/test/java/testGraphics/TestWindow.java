@@ -11,7 +11,7 @@ import baryModel.BaryModel;
 public class TestWindow extends JFrame {
     private static final Dimension WINDOW_SIZE = new Dimension(900, 700);
     private static final Point WINDOW_LOCATION = new Point(150, 100);
-    private static final String WINDOW_TITLE = "A window title!";
+    private static final String WINDOW_TITLE = "Bary window!";
     private final BaryModel model;
 
     //Creates a new window.

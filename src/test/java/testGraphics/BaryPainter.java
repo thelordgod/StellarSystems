@@ -55,7 +55,7 @@ class BaryPainter {
                 absoluteLocation[0] / SCALE,
                 absoluteLocation[1] / SCALE};
         double
-                actualSize = 20,
+                actualSize = 40,
                 scaledSize = actualSize / SCALE;
         g.setColor(simpleObject.getColor());
         g.fillOval(
@@ -80,10 +80,26 @@ class BaryPainter {
                 centerMarkerSize, centerMarkerSize);
         //TODO: paint some general system-wide data here
 
+        double furthestDistance = 0;
         for (BaryObject object : system.getObjects()) {
-            //TODO: paint orbit here
+            double distance = object.getLocation().getDistance();
+            if (distance > furthestDistance) {
+                furthestDistance = distance;
+            }
+            Color orbitColor = object.getColor();
+            g.setColor(orbitColor);
+            double scaledDistance = distance / SCALE;
+            g.drawOval(
+                    (int) (scaledLocation[0] - scaledDistance + drawOffset[0]),
+                    (int) (scaledLocation[1] - scaledDistance + drawOffset[1]),
+                    (int) scaledDistance * 2, (int) scaledDistance * 2);
             paintBaryObject(g, object, absoluteLocation);
         }
-        //TODO: paint outer edge border here, after the furthest object has been found
+        g.setColor(system.getColor());
+        double scaledFurthestDistance = furthestDistance / SCALE;
+        g.drawOval(
+                (int) (scaledLocation[0] - scaledFurthestDistance + drawOffset[0]),
+                (int) (scaledLocation[1] - scaledFurthestDistance + drawOffset[1]),
+                (int) scaledFurthestDistance * 2, (int) scaledFurthestDistance * 2);
     }
 }

@@ -37,6 +37,10 @@ public class BaryLocation {
                 distance * Math.sin(phaseAngle)};
     }
 
+    public void recalculate(double time) {
+        phaseAngle += angularVelocity * time;
+    }
+
     //
     public static BaryLocation newBaryLocationFromRadial(double distance, double phaseAngle, double angularVelocity) {
         return new BaryLocation(distance, phaseAngle, angularVelocity);

@@ -30,6 +30,10 @@ public class BaryObject {
         return location;
     }
 
+    public void recalculate(double time) {
+        location.recalculate(time);
+    }
+
     public Color getColor() {
         return color;
     }
