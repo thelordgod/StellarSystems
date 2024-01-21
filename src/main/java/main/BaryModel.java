@@ -12,13 +12,13 @@ public class BaryModel {
         universe = new BaryUniverse();
 
         BaryObject
-                independentObject = new BarySimpleObject(null, null);
+                independentObject = new BarySimpleObject(null, newBaryLocationFromCartesian(300, 0, 0));
         universe.addObject(independentObject);
 
         BaryObject
-                dependentObject1 = new BarySimpleObject(null, null),
-                dependentObject2 = new BarySimpleObject(null, null);
-        BarySystem system = new BarySystem(null, null);
+                dependentObject1 = new BarySimpleObject(null, newBaryLocationFromCartesian(50, 0, 0)),
+                dependentObject2 = new BarySimpleObject(null, newBaryLocationFromCartesian(150, 0, 0));
+        BarySystem system = new BarySystem(null, newBaryLocationFromCartesian(100, 0, 0));
         system.addObject(dependentObject1);
         system.addObject(dependentObject2);
         universe.addObject(system);
@@ -58,6 +58,13 @@ public class BaryModel {
         public double getAngularVelocity() {
             return angularVelocity;
         }
+
+        //returns [x, y]
+        public double [] getCartesian() {
+            return new double [] {
+                    distance * Math.cos(phaseAngle),
+                    distance * Math.sin(phaseAngle)};
+        }
     }
 
     //
@@ -67,10 +74,32 @@ public class BaryModel {
 
     //untested, probably doesn't work at extremes
     static BaryLocation newBaryLocationFromCartesian(double x, double y, double angularVelocity) {
-        double
-                distance = Math.hypot(x, y),
-                phaseAngle = Math.atan(y / x);
-        return new BaryLocation(distance, phaseAngle, angularVelocity);
+        return new BaryLocation(
+                Math.hypot(x, y),
+                getAngle(x, y),
+                angularVelocity);
+    }
+
+    //very bad angle calculations
+    static double getAngle(double x, double y) {
+        if (x == 0) {
+            double straightAngle = Math.PI / 2;
+            if (y > 0) {
+                return straightAngle;
+            }
+            if (y < 0) {
+                return straightAngle * 3;
+            }
+            return 0;
+        }
+        double arcTangent = Math.atan(y / x);
+        if (x < 0) {
+            return arcTangent + Math.PI;
+        }
+        if (x > 0 && y < 0) {
+            return arcTangent + Math.PI * 2;
+        }
+        return arcTangent;
     }
 
     public static class BaryObject {
@@ -131,7 +160,7 @@ public class BaryModel {
     public static class BaryUniverse extends BarySystem {
         //
         BaryUniverse() {
-            super(null, null);
+            super(null, new BaryLocation(0, 0, 0));
         }
     }
 }
