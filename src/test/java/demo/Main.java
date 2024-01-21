@@ -1,6 +1,7 @@
 package demo;
 
-import main.BaryModel;
+import baryModel.BaryModel;
+
 import testGraphics.TestWindow;
 
 //
