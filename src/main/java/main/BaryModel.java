@@ -1,11 +1,13 @@
 package main;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
+//
 public class BaryModel {
     private final BaryUniverse universe;
 
+    //
     public BaryModel() {
         universe = new BaryUniverse();
 
@@ -18,7 +20,7 @@ public class BaryModel {
                 dependentObject2 = new BarySimpleObject(null, null);
         BarySystem system = new BarySystem(null, null);
         system.addObject(dependentObject1);
-        system.addObject(dependentObject1);
+        system.addObject(dependentObject2);
         universe.addObject(system);
     }
 
