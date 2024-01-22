@@ -3,10 +3,15 @@ package demo;
 import java.awt.Color;
 
 import ThreadAbstraction.AbstractUpdater;
-import baryModel.*;
 
-import static baryModel.BaryLocation.newBaryLocationFromCartesian;
-import static baryModel.BaryLocation.newBaryLocationFromRadial;
+import static baryModel.BaryLocation.BaryLocationGenerator.newBaryLocationFromRadial;
+import static baryModel.BaryLocation.BaryLocationGenerator.newBaryLocationFromCartesian;
+
+import baryModel.BaryObject;
+import baryModel.BarySimpleObject;
+import baryModel.BarySystem;
+import baryModel.BaryUniverse;
+import baryModel.BaryModel;
 
 import testGraphics.TestWindow;
 import testGraphics.WindowUpdater;
@@ -72,7 +77,8 @@ public class Main {
         @Override
         public void update() {
             double totalElapsedTimeInSeconds = (delayCalculator.getElapsedTime() + delayCalculator.getDelay()) / 1000.0;
-            model.recalculate(totalElapsedTimeInSeconds);
+            model.precalculate(totalElapsedTimeInSeconds);
+            model.update();
         }
     }
 }

@@ -1,7 +1,7 @@
 package baryModel;
 
 //
-public class BaryModel {
+public class BaryModel implements BufferedValueInterface {
     private final BaryUniverse universe;
 
     //
@@ -14,7 +14,13 @@ public class BaryModel {
         return universe;
     }
 
-    public void recalculate(double time) {
-        universe.recalculate(time);
+    @Override
+    public void precalculate(double time) {
+        universe.precalculate(time);
+    }
+
+    @Override
+    public void update() {
+        universe.update();
     }
 }

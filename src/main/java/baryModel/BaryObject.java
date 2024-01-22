@@ -3,7 +3,7 @@ package baryModel;
 import java.awt.Color;
 
 //
-public class BaryObject {
+public class BaryObject implements BufferedValueInterface {
     private BarySystem parent;
     private BaryLocation location;
     private final Color color;
@@ -30,8 +30,14 @@ public class BaryObject {
         return location;
     }
 
-    public void recalculate(double time) {
-        location.recalculate(time);
+    @Override
+    public void precalculate(double time) {
+        location.precalculate(time);
+    }
+
+    @Override
+    public void update() {
+        location.update();
     }
 
     public Color getColor() {

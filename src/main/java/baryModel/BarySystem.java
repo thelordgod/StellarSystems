@@ -15,10 +15,18 @@ public class BarySystem extends BaryObject {
     }
 
     @Override
-    public void recalculate(double time) {
-        super.recalculate(time);
+    public void precalculate(double time) {
+        super.precalculate(time);
         for (BaryObject object : objects) {
-            object.recalculate(time);
+            object.precalculate(time);
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        for (BaryObject object : objects) {
+            object.update();
         }
     }
 
