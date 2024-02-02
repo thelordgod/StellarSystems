@@ -3,67 +3,55 @@ package baryModel;
 import java.awt.Color;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import utils.MathUtils;
 import utils.coordinates.Location;
 import utils.coordinates.Velocity;
 import utils.coordinates.Coordinates;
-import utils.coordinates.CoordinateContainerInterface;
-import utils.UpdatableValueInterface;
+import baryModel.exceptions.TopLevelObjectException;
+import baryModel.exceptions.DifferentParentException;
+import baryModel.exceptions.ObjectRemovedException;
+import baryModel.exceptions.NeighborRemovedException;
+import baryModel.systems.AbstractBarySystem;
+import baryModel.systems.BarySystem;
 
 //
-public abstract class BaryObject implements
-        CoordinateContainerInterface,
-        UpdatableValueInterface.BufferedValueInterface,
-        BaryChildInterface {
-    private @NotNull BaryObjectContainerInterface parent;
-    private @NotNull Coordinates coordinates;
-    private final @NotNull InfluenceRadiusCalculator influenceRadiusCalculator;
+public abstract class BaryObject extends MassiveCoordinatedObject implements BaryChildInterface {
+    private @Nullable BaryObjectContainerInterface parent;
 
     //
-    public BaryObject(@NotNull BaryObjectContainerInterface parent,
+    public BaryObject(@Nullable BaryObjectContainerInterface parent,
                       @NotNull Coordinates coordinates) {
+        super(coordinates);
         this.parent = parent;
-        this.coordinates = coordinates;
-        influenceRadiusCalculator = new InfluenceRadiusCalculator(this);
+    }
+    //
+    public double getInfluenceRadius() throws TopLevelObjectException {
+        return super.getInfluenceRadius((MassiveCoordinatedObject) getParent());
     }
 
     //
     @Override
-    public final @NotNull Coordinates getCoordinates() {
-        return coordinates;
+    public final @NotNull BaryObjectContainerInterface getParent() throws TopLevelObjectException {
+        if (parent == null) {
+            throw new TopLevelObjectException();
+        } else {
+            return parent;
+        }
     }
 
-    //
+    //setting parent to null is possible, but not recommended
     @Override
-    public final void setCoordinates(@NotNull Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
-
-    //
-    @Override
-    public final void setCoordinates(@NotNull Location location, @NotNull Velocity velocity) {
-        coordinates.setLocation(location);
-        coordinates.setVelocity(velocity);
-    }
-
-    //
-    @Override
-    public final @NotNull BaryObjectContainerInterface getParent() {
-        return parent;
-    }
-
-    //
-    @Override
-    public final void setParent(@NotNull BaryObjectContainerInterface parent) {
+    public void setParent(@Nullable BaryObjectContainerInterface parent) throws TopLevelObjectException {
         this.parent = parent;
     }
 
     //
     @Override
-    public void moveLevelUp() throws RootParentException {
+    public void exitSystem() throws TopLevelObjectException {
         if (parent instanceof BaryUniverse) {
-            throw new RootParentException();
+            throw new TopLevelObjectException();
         } else {
             //find new parent
             if (!(parent instanceof BaryChildInterface)) {
@@ -75,8 +63,8 @@ public abstract class BaryObject implements
                 parent.removeObject(this);
 
                 //calculate and set new coordinates
-                if (parent instanceof BarySystem) {
-                    setNewCoordinatesWhenMovingUp((BarySystem) parent);
+                if (parent instanceof AbstractBarySystem) {
+                    setNewCoordinatesWhenExiting((AbstractBarySystem) parent);
                 } else {
                     throw new RuntimeException("Parent is not a system, unable to get coordinates!");
                 }
@@ -90,7 +78,7 @@ public abstract class BaryObject implements
         }
     }
 
-    private void setNewCoordinatesWhenMovingUp(@NotNull BarySystem parentSystem) {
+    private void setNewCoordinatesWhenExiting(@NotNull AbstractBarySystem parentSystem) {
         double @NotNull []
                 oldCoordinates = getCoordinates().getLocation().getCartesian(),
                 oldSystemCoordinates = parentSystem.getCoordinates().getLocation().getCartesian();
@@ -113,24 +101,30 @@ public abstract class BaryObject implements
         setCoordinates(new Coordinates(newLocation, newVelocity));
     }
 
-    //
-    public abstract double getMass();
-
-    //TODO: needs rework, formula too crude
-    public double getInfluenceRadius() {
-        return influenceRadiusCalculator.getInfluenceRadius();
+    //unfinished, TODO: finish
+    public void transfer() {
+        //remove from previous system
+        //add to new system
     }
 
     //
     @Override
-    public void precalculate(double time) {
-        coordinates.precalculate(time);
+    public void enterNeighboringSystem(@NotNull BarySystem neighbor) throws DifferentParentException, TopLevelObjectException {
+        //TODO: finish this
     }
 
-    //
-    @Override
-    public void update() {
-        coordinates.update();
+    //transfer this object from one system to another with precalculated coordinates
+    public final void transferPrecalculated(@NotNull BaryObjectContainerInterface oldParent,
+                                            @NotNull BaryObjectContainerInterface newParent,
+                                            @NotNull Coordinates newCoordinates) {
+        try {
+            oldParent.removeObject(this);
+            this.setParent(newParent);
+            this.setCoordinates(newCoordinates);
+            newParent.addObject(this);
+        } catch (@NotNull TopLevelObjectException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //
@@ -145,8 +139,23 @@ public abstract class BaryObject implements
 
     //checks if parent is either the universe or its child count is greater than 2
     public final boolean neighborMergeabiltyCheck() {
-        @NotNull BaryObjectContainerInterface parent = getParent();
-        return parent instanceof BaryUniverse || parent.getObjects().size() > 2;
+        try {
+            @NotNull BaryObjectContainerInterface parent = getParent();
+            return parent instanceof BaryUniverse || parent.getObjects().size() > 2;
+        } catch (@NotNull TopLevelObjectException ignored) {
+            return false;
+        }
+    }
+
+    //forms a new system from this and a neighbor
+    public void formNewSystemWithNeighbor(@NotNull BaryObject neighbor) throws ObjectRemovedException {
+        @NotNull Color color = Color.yellow; //TODO: improve the color
+        try {
+            BarySystem.formNewSystem(this, neighbor, color);
+            @NotNull ObjectRemovedException exception = new ObjectRemovedException();
+            exception.addSuppressed(new NeighborRemovedException());
+            throw exception;
+        } catch (@NotNull DifferentParentException ignored) {} //TODO: yo, don't ignore this!
     }
 
     //

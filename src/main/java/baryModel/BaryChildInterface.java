@@ -4,19 +4,22 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import baryModel.exceptions.*;
+import baryModel.systems.BarySystem;
+
 //
 public interface BaryChildInterface {
     //
-    @NotNull BaryObjectContainerInterface getParent();
+    @NotNull BaryObjectContainerInterface getParent() throws TopLevelObjectException;
 
     //
-    void setParent(@NotNull BaryObjectContainerInterface parent);
+    void setParent(@NotNull BaryObjectContainerInterface parent) throws TopLevelObjectException;
+
+    //exits from this system into its parent
+    void exitSystem() throws TopLevelObjectException;
 
     //
-    void moveLevelUp() throws RootParentException;
-
-    //
-    default void checkNeighbors() throws ObjectRemovedException {
+    default void checkNeighbors() throws TopLevelObjectException, ObjectRemovedException {
         @NotNull List<@NotNull BaryObject> neighbors = getParent().getObjects();
         for (int i = 0; i < neighbors.size(); i++) {
             @NotNull BaryObject neighbor = neighbors.get(i);
@@ -34,12 +37,10 @@ public interface BaryChildInterface {
 
     //
     void checkNeighbor(@NotNull BaryObject neighbor) throws
-            UnrecognizedBaryObjectTypeException, ObjectRemovedException, NeighborRemovedException;
+            TopLevelObjectException, UnrecognizedBaryObjectTypeException,
+            ObjectRemovedException, NeighborRemovedException;
 
-    //
-    class RootParentException extends Exception {
-        public RootParentException() {
-            super("Parent is a root member, unable to move up!");
-        }
-    }
+    //enters neighboring system, has to be of the same parent!
+    //TODO: finish this
+    void enterNeighboringSystem(@NotNull BarySystem neighbor) throws TopLevelObjectException, DifferentParentException;
 }

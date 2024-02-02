@@ -5,10 +5,10 @@ import java.awt.Graphics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import baryModel.BarySystem;
+import baryModel.systems.AbstractBarySystem;
 
 //
-final class BarySystemPainter extends ObjectContainerPainter<BarySystem> {
+final class BarySystemPainter extends ObjectContainerPainter<AbstractBarySystem> {
     private final @NotNull UniversePainter universePainter;
 
     //
@@ -21,11 +21,15 @@ final class BarySystemPainter extends ObjectContainerPainter<BarySystem> {
     //
     @Override
     public void paint(@NotNull Graphics g,
-                      @NotNull BarySystem system,
+                      @NotNull AbstractBarySystem system,
                       double @NotNull [] absoluteLocation) {
         double @NotNull [] scaledLocation = scaleLocation(absoluteLocation);
         paintMembers(g, universePainter.getGenericObjectPainter(), system, absoluteLocation);
-        //TODO: paint some general system-wide data here
+        /*
+        TODO: paint some general system-wide data here, such as:
+            * member count
+            * etc
+        */
         CommonPainting.paintCenterMarker(g, getDrawableFromScaled(scaledLocation), system.getColor());
     }
 }

@@ -2,10 +2,10 @@ package utils.coordinates;
 
 import org.jetbrains.annotations.NotNull;
 
-import utils.UpdatableValueInterface;
+import utils.PrecalculableInterface;
 
 //
-public final class Coordinates implements UpdatableValueInterface.BufferedValueInterface {
+public final class Coordinates implements PrecalculableInterface.BufferedValueInterface {
     private @NotNull Location location;
     private @NotNull Velocity velocity;
 
@@ -13,6 +13,18 @@ public final class Coordinates implements UpdatableValueInterface.BufferedValueI
     public Coordinates(@NotNull Location location, @NotNull Velocity velocity) {
         this.location = location;
         this.velocity = velocity;
+    }
+
+    //cartesian from projections
+    public Coordinates(double x, double y, double vx, double vy) {
+        this(
+                new Location.LocationCartesian(x, y),
+                Velocity.VelocityCartesian.newVelocityFromProjections(vx, vy));
+    }
+
+    //blank cartesian
+    public Coordinates() {
+        this(0, 0, 0, 0);
     }
 
     //
