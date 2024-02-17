@@ -7,9 +7,16 @@ by [Krumuvecis](https://github.com/Krumuvecis)
 
 ## Abstract
 
-Currently, simulates barycentric systems and object collisions in cartesian and polar coordinates.
+Currently, simulates barycentric systems and object collisions in cartesian and polar kineticParameters.
 
 _Work is under progress..._
+
+
+## Requirements
+
+* JDK: 21
+* [ThreadAbstraction](https://github.com/KruMF/ThreadAbstraction) : 0.5.1
+* [MathUtils](https://github.com/KruMF/MathUtils) : 0.3
 
 
 ## Demo

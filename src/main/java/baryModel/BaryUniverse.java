@@ -1,49 +1,30 @@
 package baryModel;
 
-import java.awt.Color;
 import java.util.List;
+import java.awt.Color;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import utils.coordinates.Coordinates;
-import baryModel.exceptions.ObjectRemovedException;
+import kinetics.Location;
+import kinetics.Velocity;
 import baryModel.exceptions.TopLevelObjectException;
-import baryModel.systems.AbstractBarySystem;
+import baryModel.exceptions.ObjectRemovedException;
+import baryModel.basicModels.BasicBaryObject;
+import baryModel.basicModels.InfluentialObject;
 import baryModel.systems.BarySystem;
 
-/**
- * Top-level bound object; a root system.
- * Needed for proper SOI calculations, and SOI for this object needs to be infinite.
- */
-public class BaryUniverse extends AbstractBarySystem {
+//
+public class BaryUniverse extends TopLevelObject {
     private static final @NotNull Color TOP_OBJECT_COLOR = Color.white;
 
     //
     public BaryUniverse() {
-        super(null, new Coordinates(), TOP_OBJECT_COLOR);
+        super(TOP_OBJECT_COLOR);
     }
 
-    //
-    @Override
-    public final void setParent(@Nullable BaryObjectContainerInterface parent) throws TopLevelObjectException {
-        throw new TopLevelObjectException();
-    }
-
-    //
-    @Override
-    public final double getInfluenceRadius() throws TopLevelObjectException {
-        throw new TopLevelObjectException();
-    }
-
-    //does a complete cycle, use this for performing calculations
-    public final void iterateDynamicsAndStructure(double time) {
-        handleDynamics(time);
-        handleStructure();
-    }
-
-    private void handleDynamics(double time) {
-        precalculate(time);
+    //handles the dynamics for a single cycle
+    final void handleDynamics(double time) {
+        calculate(time);
         update();
         /* TODO: recalculate barycenters here, after coordinates' update
          *  * go through all objects
@@ -51,15 +32,17 @@ public class BaryUniverse extends AbstractBarySystem {
          *      * location normalization, so that the top object is always at {0, 0}
          *      * normalization of angles
          */
+        updateCenter();
     }
 
-    //doesn't precalculate itself, only members
+    //doesn't calculate itself, only members
     @Override
-    public final void precalculate(double time) {
-        precalculateMembers(time);
+    public final void calculate(double time) {
+        calculateMembers(time);
     }
 
-    private void handleStructure() {
+    //handles the dynamics for a single cycle
+    final void handleStructure() {
         checkMeaninglessSystems();
         //barycenter recalculation shouldn't be necessary here, as they should be conserved
 
@@ -73,15 +56,16 @@ public class BaryUniverse extends AbstractBarySystem {
          *      * there might be mass loss etc, so barycenters need to be recalculated all the way to the top
          *      * it would be easier to just check all members once, rather then checking all possibly multiple times
          */
+        updateCenter();
     }
 
     //goes through members, but doesn't check itself
     @Override
     public final void checkMeaninglessSystems() {
-        @NotNull List<@NotNull BaryObject> objects = getObjects();
+        @NotNull List<@NotNull BasicBaryObject> objects = getObjects();
         for (int i = 0; i < objects.size(); i++) {
-            @NotNull BaryObject object = objects.get(i);
-            if (object instanceof BaryObjectContainerInterface container) {
+            @NotNull BasicBaryObject object = objects.get(i);
+            if (object instanceof @NotNull BaryObjectContainerInterface container) {
                 try {
                     container.checkMeaninglessSystems();
                 } catch (ObjectRemovedException ignored) {
@@ -89,12 +73,6 @@ public class BaryUniverse extends AbstractBarySystem {
                 }
             }
         }
-    }
-
-    //not possible to exit the top-level system
-    @Override
-    public final void exitSystem() throws TopLevelObjectException {
-        throw new TopLevelObjectException();
     }
 
     // Check child neighbors normally
@@ -105,16 +83,14 @@ public class BaryUniverse extends AbstractBarySystem {
 
     // No neighbors to check for a top-bound object.
     @Override
-    public final void checkNeighbors() {}
-
-    // No neighbors to check for a top-bound object.
-    @Override
-    public final void checkNeighbor(@NotNull BaryObject neighbor) {}
+    public final void checkNeighbors() throws TopLevelObjectException {
+        throw new TopLevelObjectException();
+    }
 
     // There shouldn't be any neighbors to enter. Throw an exception, if any is found.
     // Furthermore, top-bound object should always remain at top.
     @Override
-    public final void enterNeighboringSystem(@NotNull BarySystem neighbor) throws TopLevelObjectException {
-        throw new TopLevelObjectException();
+    public final void enterNeighboringSystem(@NotNull BarySystem neighbor) {
+        throw new RuntimeException(new TopLevelObjectException());
     }
 }

@@ -7,48 +7,50 @@ import java.awt.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import utils.coordinates.Coordinates;
+import kinetics.Location;
+import kinetics.Velocity;
+import baryModel.basicModels.BasicBaryObject;
 import baryModel.BaryObject;
 import baryModel.BaryObjectContainerInterface;
 
 //
 public abstract class AbstractBarySystem extends BaryObject implements BaryObjectContainerInterface {
-    static final boolean MERGE_ON_TOUCH = false;
-    private final @NotNull List<@NotNull BaryObject> objects = new ArrayList<>();
+    private final @NotNull List<@NotNull BasicBaryObject> objects = new ArrayList<>();
     private final @NotNull SystemName name;
     private final @NotNull Color color;
 
     //
     public AbstractBarySystem(@Nullable BaryObjectContainerInterface parent,
-                              @NotNull Coordinates coordinates,
+                              @Nullable Location location,
+                              @Nullable Velocity velocity,
                               @NotNull Color color) {
-        super(parent, coordinates);
+        super(parent, location, velocity, null);
         this.color = color;
         name = new SystemName(null);
     }
 
     //
     @Override
-    public final @NotNull List<@NotNull BaryObject> getObjects() {
+    public final @NotNull List<@NotNull BasicBaryObject> getObjects() {
         return objects;
     }
 
     //
     @Override
-    public final void addObject(@NotNull BaryObject object) {
+    public final void addObject(@NotNull BasicBaryObject object) {
         objects.add(object);
     }
 
     //
     @Override
-    public final void removeObject(@NotNull BaryObject object) {
+    public final void removeObject(@NotNull BasicBaryObject object) {
         objects.remove(object);
     }
 
     //
-    public final void precalculateMembers(double time) {
-        for (@NotNull BaryObject object : objects) {
-            object.precalculate(time);
+    public final void calculateMembers(double time) {
+        for (@NotNull BasicBaryObject object : objects) {
+            object.calculate(time);
         }
     }
 
@@ -60,19 +62,38 @@ public abstract class AbstractBarySystem extends BaryObject implements BaryObjec
     }
 
     private void updateMembers() {
-        for (@NotNull BaryObject object : objects) {
+        for (@NotNull BasicBaryObject object : objects) {
             object.update();
         }
     }
 
-    //TODO: improve this, maybe precalculate masses on update?
+    //
+    public void updateCenter() {
+        @NotNull Location baryCenter = getBaryCenter();
+        getLocation().increaseCartesian(
+                baryCenter.getX(),
+                baryCenter.getY(),
+                baryCenter.getZ());
+        updateMemberCenters(baryCenter);
+    }
+
+    //
+    public final void updateMemberCenters(@NotNull Location newCenter) {
+        for (@NotNull BasicBaryObject object : objects) {
+            if (object instanceof @NotNull AbstractBarySystem system) {
+                system.updateCenter();
+            }
+            object.getLocation().increaseCartesian(
+                    -(newCenter.getX()),
+                    -(newCenter.getY()),
+                    -(newCenter.getZ()));
+        }
+    }
+
+    //
     @Override
     public final double getMass() {
-        double mass = 0;
-        for (BaryObject object : objects) {
-            mass += object.getMass();
-        }
-        return mass;
+        return getMassWithout(null);
     }
 
     //

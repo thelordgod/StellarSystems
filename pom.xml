@@ -6,14 +6,15 @@
 
     <groupId>com.github.KrumSpace</groupId>
     <artifactId>StellarSystems</artifactId>
-    <version>0.12</version>
+    <version>0.13</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
-        <threadAbstraction.version>0.5</threadAbstraction.version>
+        <threadAbstraction.version>0.5.1</threadAbstraction.version>
+        <mathUtils.version>0.3</mathUtils.version>
     </properties>
 
     <repositories>
@@ -28,6 +29,11 @@
             <groupId>com.github.KruMF</groupId>
             <artifactId>ThreadAbstraction</artifactId>
             <version>${threadAbstraction.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.KruMF</groupId>
+            <artifactId>MathUtils</artifactId>
+            <version>${mathUtils.version}</version>
         </dependency>
     </dependencies>
 </project>
