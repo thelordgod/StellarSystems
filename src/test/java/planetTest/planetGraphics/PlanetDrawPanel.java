@@ -3,12 +3,12 @@ package planetTest.planetGraphics;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import commonGraphics.ColorUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import baryGraphics.panels.CenteredDrawPanel;
-import baryGraphics.panels.ScaledDrawInterface;
+import static commonGraphics.ColorUtils.getGray;
+import commonGraphics.panels.graphicalPanels.CenteredDrawPanel;
+import commonGraphics.panels.graphicalPanels.ScaledDrawInterface;
 import planetTest.planetModel.Planet;
 import planetTest.planetModel.PlanetContainer;
 
@@ -17,7 +17,7 @@ public class PlanetDrawPanel extends CenteredDrawPanel implements ScaledDrawInte
     private static final @NotNull Color
             BACKGROUND = Color.black,
             TEXT_COLOR = Color.white,
-            NULL_PLANET_COLOR = ColorUtils.getGray(80, 255);
+            NULL_PLANET_COLOR = getGray(80, 255);
     private static final double NULL_PLANET_DIAMETER_PROPORTION = 0.4;
     @SuppressWarnings("FieldMayBeFinal")
     private double scale;
