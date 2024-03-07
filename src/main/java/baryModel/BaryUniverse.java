@@ -5,12 +5,9 @@ import java.awt.Color;
 
 import org.jetbrains.annotations.NotNull;
 
-import kinetics.Location;
-import kinetics.Velocity;
 import baryModel.exceptions.TopLevelObjectException;
 import baryModel.exceptions.ObjectRemovedException;
 import baryModel.basicModels.BasicBaryObject;
-import baryModel.basicModels.InfluentialObject;
 import baryModel.systems.BarySystem;
 
 //
@@ -28,11 +25,12 @@ public class BaryUniverse extends TopLevelObject {
         update();
         /* TODO: recalculate barycenters here, after coordinates' update
          *  * go through all objects
-         *  * could combine this with coordinate normalization
-         *      * location normalization, so that the top object is always at {0, 0}
-         *      * normalization of angles
          */
-        updateCenter();
+        updateBaryCenter();
+        /*
+         * TODO: normalize angles here
+         *  * go through all objects
+         */
     }
 
     //doesn't calculate itself, only members
@@ -56,7 +54,8 @@ public class BaryUniverse extends TopLevelObject {
          *      * there might be mass loss etc, so barycenters need to be recalculated all the way to the top
          *      * it would be easier to just check all members once, rather then checking all possibly multiple times
          */
-        updateCenter();
+        updateBaryCenter();
+        //TODO: could normalize angles again here
     }
 
     //goes through members, but doesn't check itself

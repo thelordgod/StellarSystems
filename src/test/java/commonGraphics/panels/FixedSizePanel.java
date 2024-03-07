@@ -7,10 +7,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 //
-public class FixedSizePanel extends MinimalPanel {
+public abstract class FixedSizePanel extends MinimalPanel {
     //
-    public FixedSizePanel(@Nullable Color background, int @NotNull [] size) {
-        super(background);
+    public FixedSizePanel(int @NotNull [] size,
+                          @Nullable Color background,
+                          @Nullable Color borderColor, boolean drawBorders,
+                          @Nullable Color diagonalColor, boolean drawDiagonals) {
+        super(background, borderColor, drawBorders, diagonalColor, drawDiagonals);
         setSizes(size);
     }
 
