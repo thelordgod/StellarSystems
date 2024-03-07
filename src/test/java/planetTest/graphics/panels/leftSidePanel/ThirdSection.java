@@ -29,9 +29,9 @@ final class ThirdSection extends AbstractSectionPanel {
     //
     @Override
     public void mainPaint(@NotNull Graphics g) {
-        g.setColor(TEXT_COLOR);
-        drawInfoLine(g, "Blank section", 1);
         g.setColor(HEADING_COLOR);
+        drawInfoLine(g, "Blank section", 1);
+        g.setColor(TEXT_COLOR);
         drawInfoLine(g, "For future use", 2);
         // Paint more stuff here, if needed.
     }
