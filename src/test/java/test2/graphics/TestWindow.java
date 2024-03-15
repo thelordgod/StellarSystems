@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import baryModel.BaryUniverse;
 
+import commonGraphics.WindowSettings;
 import commonGraphics.UpdatingWindow;
 
 //A graphical window for testing purposes.
@@ -20,7 +21,7 @@ public final class TestWindow extends UpdatingWindow {
 
     //
     public TestWindow(@NotNull BaryUniverse universe) {
-        super(WINDOW_SIZE, WINDOW_LOCATION, WINDOW_TITLE); //default frame rate
+        super(new WindowSettings(WINDOW_SIZE, WINDOW_LOCATION, WINDOW_TITLE)); //default frame rate
         this.universe = universe;
         //observer = new Observer();
         addPanels();

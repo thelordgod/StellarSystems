@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import baryModel.BaryUniverse;
 
 import static commonGraphics.ColorUtils.getGray;
+import commonGraphics.WindowSettings;
 import commonGraphics.UpdatingWindow;
 import baryGraphics.Observer;
 import demo.graphics.panels.leftSidePanel.LeftSidePanel;
@@ -32,7 +33,7 @@ public final class DemoWindow extends UpdatingWindow {
 
     //Creates a new window.
     public DemoWindow(@NotNull BaryUniverse universe) {
-        super(WINDOW_SIZE, WINDOW_LOCATION, WINDOW_TITLE, FRAME_RATE);
+        super(new WindowSettings(WINDOW_SIZE, WINDOW_LOCATION, WINDOW_TITLE), FRAME_RATE);
         this.universe = universe;
         observer = new Observer();
         addPanels();
