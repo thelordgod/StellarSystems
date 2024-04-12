@@ -1,5 +1,6 @@
 package test3.graphics;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import static consoleUtils.SimplePrinting.printLine;
 
 import commonGraphics.panels.FixedHorizontalPanel;
+import test3.models.TestModule;
 import test3.models.WrongModuleTypeException;
 import test3.models.SpacecraftModule;
 import test3.player.Player;
@@ -21,7 +23,7 @@ final class BottomPanel extends FixedHorizontalPanel {
     private static final int PANEL_HEIGHT = 300;
     private static final @NotNull Color TEXT_COLOR = Color.white;
     private final @NotNull Player player;
-    private int activePart;
+    private int hoveredPart;
     @SuppressWarnings("FieldCanBeLocal")
     private final @NotNull BottomPanelMouseListener mouseListener;
     private final @NotNull BottomPanelMouseMotionListener mouseMotionListener;
@@ -32,7 +34,7 @@ final class BottomPanel extends FixedHorizontalPanel {
                 palette.getPanelBorder(), true,
                 palette.getPanelDiagonals(), false);
         this.player = player;
-        activePart = -1;
+        hoveredPart = -1;
         mouseListener = new BottomPanelMouseListener(this);
         addMouseListener(mouseListener);
         mouseMotionListener = new BottomPanelMouseMotionListener();
@@ -73,20 +75,41 @@ final class BottomPanel extends FixedHorizontalPanel {
                 partSeparation = 160,
                 infoY = 180, textOffsetX = -40;
         @NotNull List<@NotNull SpacecraftModule> partInventory = player.getShipPartInventory();
-        activePart = -1; //resets the active part
+        hoveredPart = -1; //resets the hovered part
+        partInventory = filterParts(partInventory);
         for (int i = 0; i < partInventory.size(); i++) {
             @NotNull SpacecraftModule part = partInventory.get(i);
             int partX = partDrawLocation[0] + partSeparation * i;
             boolean active = ShipPartPainter.paintShipPart(g, part, new int [] {partX, partDrawLocation[1]}, mouseMotionListener.getLocation());
             ShipPartPainter.paintPartInfo(g, part, TEXT_COLOR, new int [] {partX + textOffsetX, infoY});
             if (active) {
-                activePart = i;
+                hoveredPart = i;
             }
         }
     }
 
-    int getActivePart() {
-        return activePart;
+    private @NotNull List<@NotNull SpacecraftModule> filterParts(@NotNull List<@NotNull SpacecraftModule> partInventory) {
+        @NotNull List<@NotNull SpacecraftModule> filteredParts = new ArrayList<>();
+        for (@NotNull SpacecraftModule part : partInventory) {
+            switch (player.getShipyardMode()) {
+                case CREATE_SHIP -> {
+                    if (part instanceof TestModule) {
+                        continue;
+                    }
+                }
+                case ADD_MODULE -> {
+                }
+                default -> {
+                    throw new RuntimeException("Undefined ShipyardMode");
+                }
+            }
+            filteredParts.add(part);
+        }
+        return filteredParts;
+    }
+
+    int getHoveredPart() {
+        return hoveredPart;
     }
 
     private void paintMode_missions(@NotNull Graphics g) {
@@ -112,9 +135,9 @@ final class BottomPanel extends FixedHorizontalPanel {
         @Override
         public void mousePressed(MouseEvent e) {
             printLine("Mouse pressed at " + e.getX() + " x " + e.getY());
-            int activePart = panel.getActivePart();
-            if (activePart >= 0) {
-                printLine("Part number " + activePart);
+            int hoveredPart = panel.getHoveredPart();
+            if (hoveredPart >= 0) {
+                printLine("Part number " + hoveredPart);
             }
         }
 
@@ -126,14 +149,23 @@ final class BottomPanel extends FixedHorizontalPanel {
         @Override
         public void mouseReleased(MouseEvent e) {
             printLine("Mouse released at " + e.getX() + " x " + e.getY());
-            int activePart = panel.getActivePart();
-            if (activePart >= 0) {
-                printLine("Part number " + activePart);
-                try {
-                    panel.getPlayer().createNewShip(activePart);
-                } catch (@NotNull WrongModuleTypeException exception) {
-                    printLine(exception.getMessage());
+            int hoveredPart = panel.getHoveredPart();
+            if (hoveredPart >= 0) {
+                printLine("Part number " + hoveredPart);
+                switch (panel.getPlayer().getShipyardMode()) {
+                    case CREATE_SHIP -> {
+                        try {
+                            panel.getPlayer().createNewShip(hoveredPart);
+                        } catch (@NotNull WrongModuleTypeException exception) {
+                            printLine(exception.getMessage());
+                        }
+                    }
+                    case ADD_MODULE -> {}
+                    default -> {
+                        throw new RuntimeException("Undefined ShipyardMode");
+                    }
                 }
+
             }
         }
 

@@ -102,7 +102,7 @@ public abstract class AbstractKeyListener implements KeyListener {
 
     //
     private static final class KeyActionUpdater extends AbstractUpdater {
-        private static final long UPDATE_DELAY = 20; // ms
+        private static final long UPDATE_DELAY = 16; // ms
         private final @NotNull AbstractKeyListener listener;
 
         //

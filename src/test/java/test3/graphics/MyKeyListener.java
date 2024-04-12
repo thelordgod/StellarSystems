@@ -7,6 +7,7 @@ import static consoleUtils.SimplePrinting.printLine;
 import commonGraphics.AbstractKeyListener;
 import test3.player.PaintMode;
 import test3.player.Player;
+import test3.player.ShipyardMode;
 
 //
 final class MyKeyListener extends AbstractKeyListener {
@@ -56,11 +57,10 @@ final class MyKeyListener extends AbstractKeyListener {
         }
     }
 
-    @SuppressWarnings("SwitchStatementWithTooFewBranches")
     private void keyActionSwitch_byText_ShipyardMode(@NotNull String keyText) throws UndefinedKeyActionException {
         switch (keyText) {
-            case "Space" -> printLine("A space bar has been pressed!");
-            //check more shipyard-specific keys here
+            case "1" -> player.setShipyardMode(ShipyardMode.CREATE_SHIP);
+            case "2" -> player.setShipyardMode(ShipyardMode.ADD_MODULE);
             default -> throw new UndefinedKeyActionException();
         }
     }

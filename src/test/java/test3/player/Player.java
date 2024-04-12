@@ -5,10 +5,9 @@ import java.util.ArrayList;
 
 import org.jetbrains.annotations.NotNull;
 
-import test3.models.WrongModuleTypeException;
-import test3.models.SpacecraftModule;
-import test3.models.StructuralModule;
-import test3.models.Spacecraft;
+import test3.models.*;
+
+import static consoleUtils.SimplePrinting.printLine;
 
 //
 public class Player {
@@ -16,6 +15,8 @@ public class Player {
     private final @NotNull List<@NotNull Spacecraft> ownedShips;
     private final @NotNull List<@NotNull SpacecraftModule> shipPartInventory;
     private @NotNull PaintMode paintMode; // for graphical purposes
+    private @NotNull ShipyardMode shipyardMode; // for graphical purposes
+    private int selectedPartIndex; // for shipyard purposes
 
     //
     public Player(int money) {
@@ -23,6 +24,7 @@ public class Player {
         ownedShips = new ArrayList<>();
         shipPartInventory = new ArrayList<>();
         paintMode = PaintMode.SHIPYARD;
+        shipyardMode = ShipyardMode.CREATE_SHIP;
     }
 
     public @NotNull Wallet getWallet() {
@@ -64,13 +66,35 @@ public class Player {
         }
     }
 
+    //
+    public void addPartToConnection(@NotNull ModuleConnection connection, int partInventoryIndex) {
+        try {
+            @NotNull SpacecraftModule part = shipPartInventory.get(partInventoryIndex);
+            connection.setTetheredConnection(part);
+            shipPartInventory.remove(partInventoryIndex);
+        } catch (@NotNull IndexOutOfBoundsException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     // for graphical purposes
     public final @NotNull PaintMode getPaintMode() {
         return paintMode;
     }
 
     // for graphical purposes
+    public final @NotNull ShipyardMode getShipyardMode() {
+        return shipyardMode;
+    }
+
+    // for graphical purposes
     public void setPaintMode(@NotNull PaintMode paintMode) {
         this.paintMode = paintMode;
+    }
+
+    // for graphical purposes
+    public void setShipyardMode(@NotNull ShipyardMode shipyardMode) {
+        printLine("Shipyard mode set to " + shipyardMode.toString());
+        this.shipyardMode = shipyardMode;
     }
 }

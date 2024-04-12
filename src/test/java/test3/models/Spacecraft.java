@@ -1,6 +1,7 @@
 package test3.models;
 
 import java.awt.Color;
+import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +28,15 @@ public class Spacecraft {
         return core;
     }
 
+    //
+    public @NotNull List<@NotNull ModuleConnection> getFreeConnections() {
+        @NotNull List<@NotNull ModuleConnection> freeConnections = core.getFreeConnections();
+
+
+
+        return freeConnections;
+    }
+
     //gets the total size of the ship
     public int getSize() {
         //TODO: improve this and remove the "+10"
@@ -36,5 +46,8 @@ public class Spacecraft {
     //for graphical purposes
     public @NotNull Color getColor() {
         return color;
+    }
+
+    public void addModule(SpacecraftModule part) {
     }
 }
