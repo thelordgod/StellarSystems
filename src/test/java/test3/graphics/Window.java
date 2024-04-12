@@ -20,7 +20,7 @@ public class Window extends UpdatingWindow {
         panelPalette = new PanelPalette();
         //add stuff before panels here
         addPanels();
-        //add key listener here
+        addKeyListener(new MyKeyListener(this.player));
         revalidate();
         startUpdating();
     }

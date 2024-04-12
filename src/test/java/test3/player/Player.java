@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 //
 public class Player {
-    private PaintMode paintMode;
+    private @NotNull PaintMode paintMode;
 
     //
     public Player() {
@@ -17,7 +17,7 @@ public class Player {
     }
 
     //
-    public void setPaintMode(PaintMode paintMode) {
+    public void setPaintMode(@NotNull PaintMode paintMode) {
         this.paintMode = paintMode;
     }
 }
