@@ -15,13 +15,9 @@ public class PanelPalette {
 
     public PanelPalette() {
         mainBackground = Color.black;
-        panelBackground = getOpaqueGray(45);
-        panelBorder = getOpaqueGray(30);
+        panelBackground = ColorUtils.getOpaqueGray(45);
+        panelBorder = ColorUtils.getOpaqueGray(30);
         panelDiagonals = new Color(255, 120, 0);
-    }
-
-    private @NotNull Color getOpaqueGray(int brightness) {
-        return ColorUtils.getGray(brightness, 255);
     }
 
     //
