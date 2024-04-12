@@ -26,7 +26,7 @@ final class ShipPainter {
     }
 
     private static void paintParts(@NotNull Graphics g, @NotNull Spacecraft ship, int @NotNull [] location) {
-        ShipPartPainter.paintShipPart(g, ship.getCore(), location);
+        ShipPartPainter.paintShipPart(g, ship.getCore(), location, new int[2]);
     }
 
     private static void paintOutline(@NotNull Graphics g, @NotNull Spacecraft ship, int @NotNull [] location) {
