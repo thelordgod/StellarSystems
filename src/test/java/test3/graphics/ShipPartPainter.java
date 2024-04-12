@@ -14,19 +14,21 @@ import test3.models.SpacecraftModule;
 final class ShipPartPainter {
     private static final int TEXT_HEIGHT = 15;
 
-    //call this to paint part only
-    static void paintShipPart(@NotNull Graphics g, @NotNull SpacecraftModule part, int @NotNull [] paintCenter,
+    //call this to paint part only; returns within status (true, if mouse is within this part)
+    static boolean paintShipPart(@NotNull Graphics g, @NotNull SpacecraftModule part, int @NotNull [] paintCenter,
                               int @NotNull [] mouseLocation) {
         int size = part.getSize();
         int @NotNull [] drawStart = new int [] {
                 paintCenter[0] - size / 2,
                 paintCenter[1] - size / 2};
         g.setColor(part.getColor());
-        if (within(drawStart, size, mouseLocation)) {
+        boolean within = within(drawStart, size, mouseLocation);
+        if (within) {
             g.fillRect(drawStart[0], drawStart[1], size, size);
         } else {
             g.drawRect(drawStart[0], drawStart[1], size, size);
         }
+        return within;
     }
 
     private static boolean within(int @NotNull [] drawStart, int size, int @NotNull [] target) {

@@ -20,6 +20,8 @@ final class BottomPanel extends FixedHorizontalPanel {
     private static final int PANEL_HEIGHT = 300;
     private static final @NotNull Color TEXT_COLOR = Color.white;
     private final @NotNull Player player;
+    private int activePart;
+    @SuppressWarnings("FieldCanBeLocal")
     private final @NotNull BottomPanelMouseListener mouseListener;
     private final @NotNull BottomPanelMouseMotionListener mouseMotionListener;
 
@@ -29,7 +31,8 @@ final class BottomPanel extends FixedHorizontalPanel {
                 palette.getPanelBorder(), true,
                 palette.getPanelDiagonals(), false);
         this.player = player;
-        mouseListener = new BottomPanelMouseListener();
+        activePart = -1;
+        mouseListener = new BottomPanelMouseListener(this);
         addMouseListener(mouseListener);
         mouseMotionListener = new BottomPanelMouseMotionListener();
         addMouseMotionListener(mouseMotionListener);
@@ -65,12 +68,20 @@ final class BottomPanel extends FixedHorizontalPanel {
                 partSeparation = 160,
                 infoY = 180, textOffsetX = -40;
         @NotNull List<@NotNull SpacecraftModule> partInventory = player.getShipPartInventory();
+        activePart = -1; //resets the active part
         for (int i = 0; i < partInventory.size(); i++) {
             @NotNull SpacecraftModule part = partInventory.get(i);
             int partX = partDrawLocation[0] + partSeparation * i;
-            ShipPartPainter.paintShipPart(g, part, new int [] {partX, partDrawLocation[1]}, mouseMotionListener.getLocation());
+            boolean active = ShipPartPainter.paintShipPart(g, part, new int [] {partX, partDrawLocation[1]}, mouseMotionListener.getLocation());
             ShipPartPainter.paintPartInfo(g, part, TEXT_COLOR, new int [] {partX + textOffsetX, infoY});
+            if (active) {
+                activePart = i;
+            }
         }
+    }
+
+    int getActivePart() {
+        return activePart;
     }
 
     private void paintMode_missions(@NotNull Graphics g) {
@@ -81,8 +92,12 @@ final class BottomPanel extends FixedHorizontalPanel {
 
     //
     private static final class BottomPanelMouseListener implements MouseListener {
+        private final @NotNull BottomPanel panel;
+
         //
-        BottomPanelMouseListener() {}
+        BottomPanelMouseListener(@NotNull BottomPanel panel) {
+            this.panel = panel;
+        }
 
         /**
          * Invoked when a mouse button has been pressed on a component.
@@ -92,6 +107,10 @@ final class BottomPanel extends FixedHorizontalPanel {
         @Override
         public void mousePressed(MouseEvent e) {
             printLine("Mouse pressed at " + e.getX() + " x " + e.getY());
+            int activePart = panel.getActivePart();
+            if (activePart >= 0) {
+                printLine("Part number " + activePart);
+            }
         }
 
         /**
@@ -102,6 +121,10 @@ final class BottomPanel extends FixedHorizontalPanel {
         @Override
         public void mouseReleased(MouseEvent e) {
             printLine("Mouse released at " + e.getX() + " x " + e.getY());
+            int activePart = panel.getActivePart();
+            if (activePart >= 0) {
+                printLine("Part number " + activePart);
+            }
         }
 
         /**
