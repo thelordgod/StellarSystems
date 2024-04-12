@@ -1,16 +1,23 @@
 package test3.graphics;
 
 import java.awt.LayoutManager;
-import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
+
+import org.jetbrains.annotations.NotNull;
 
 import commonGraphics.UpdatingWindow;
+import test3.player.Player;
 
 //
 public class Window extends UpdatingWindow {
+    private final @NotNull Player player;
+    private final @NotNull PanelPalette panelPalette;
 
     //
-    public Window() {
+    public Window(@NotNull Player player) {
         super(new TestWindowSettings()); //default frame rate
+        this.player = player;
+        panelPalette = new PanelPalette();
         //add stuff before panels here
         addPanels();
         //add key listener here
@@ -21,9 +28,9 @@ public class Window extends UpdatingWindow {
     //
     @Override
     public void addPanels() {
-        LayoutManager layout = new BoxLayout(getContentPane(), BoxLayout.X_AXIS);
+        @NotNull LayoutManager layout = new BorderLayout();
         getContentPane().setLayout(layout);
-        add(new Panel());
-        // Add more panels here, if needed.
+        add(new BottomPanel(player, panelPalette), BorderLayout.SOUTH);
+        add(new MainPanel(player, panelPalette));
     }
 }
