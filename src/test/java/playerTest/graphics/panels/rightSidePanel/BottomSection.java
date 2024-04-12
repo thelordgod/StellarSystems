@@ -8,7 +8,6 @@ import javax.swing.BoxLayout;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static commonGraphics.ColorUtils.TRANSPARENT_BLACK;
 import commonGraphics.panels.MinimalPanel;
 import commonGraphics.panels.sidePanels.SectionContainerInterface;
 
@@ -23,7 +22,7 @@ final class BottomSection extends MinimalPanel implements SectionContainerInterf
     //
     BottomSection(@Nullable Color borderColor, boolean drawSectionBorders,
                   @Nullable Color diagonalColor, boolean drawSectionDiagonals) {
-        super(TRANSPARENT_BLACK, borderColor, DRAW_PANEL_BORDERS, diagonalColor, DRAW_PANEL_DIAGONALS);
+        super(null, borderColor, DRAW_PANEL_BORDERS, diagonalColor, DRAW_PANEL_DIAGONALS);
         sectionBorderColor = borderColor;
         this.drawSectionBorders = drawSectionBorders;
         sectionDiagonalColor = diagonalColor;

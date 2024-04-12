@@ -6,6 +6,8 @@ import javax.swing.BoxLayout;
 
 import org.jetbrains.annotations.Nullable;
 
+import static consoleUtils.SimplePrinting.printLine;
+
 import commonGraphics.panels.sidePanels.AbstractSidePanel;
 
 //
@@ -22,6 +24,7 @@ public class RightSidePanel extends AbstractSidePanel {
                 PANEL_WIDTH, background,
                 borderColor, true,
                 null, false);
+        printLine("Creating right side panel");
         this.sectionBorderColor = borderColor;
         this.sectionDiagonalColor = borderColor;
         addSections();

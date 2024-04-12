@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static commonGraphics.ColorUtils.TRANSPARENT_BLACK;
 import commonGraphics.panels.MinimalPanel;
 import commonGraphics.panels.sidePanels.SectionContainerInterface;
 
@@ -17,7 +16,7 @@ public abstract class CommonTopSection extends MinimalPanel implements SectionCo
     //
     public CommonTopSection(@Nullable Color borderColor, @Nullable Color diagonalColor) {
         super(
-                TRANSPARENT_BLACK,
+                null,
                 borderColor, false,
                 diagonalColor, false);
         this.borderColor = borderColor;

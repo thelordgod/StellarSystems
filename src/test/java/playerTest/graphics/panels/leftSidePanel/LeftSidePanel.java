@@ -5,6 +5,8 @@ import java.awt.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static consoleUtils.SimplePrinting.printLine;
+
 import commonGraphics.UpdatingWindow;
 import commonGraphics.panels.sidePanels.commonLeftSidePanel.CommonLeftSidePanel;
 import commonGraphics.panels.sidePanels.commonLeftSidePanel.CommonTopSection;
@@ -18,8 +20,9 @@ public final class LeftSidePanel extends CommonLeftSidePanel {
                          @Nullable Color background, @Nullable Color borderColor) {
         super(
                 window, background,
-                borderColor, true, true,
-                DIAGONAL_COLOR, false, false);
+                Color.red/*borderColor*/, true, true,
+                DIAGONAL_COLOR, true, true);
+        printLine("Creating left side panel");
         addSections();
     }
 

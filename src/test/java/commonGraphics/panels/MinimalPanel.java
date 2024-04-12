@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static commonGraphics.ColorUtils.TRANSPARENT_BLACK;
+import static consoleUtils.SimplePrinting.printLine;
 
 //a minimal panel with most common features
 public abstract class MinimalPanel extends JPanel {
@@ -22,7 +22,7 @@ public abstract class MinimalPanel extends JPanel {
                         @Nullable Color borderColor, boolean drawBorders,
                         @Nullable Color diagonalColor, boolean drawDiagonals) {
         super();
-        setBackground(Objects.requireNonNullElse(background, TRANSPARENT_BLACK));
+        setBackground(background);
         this.borderColor = Objects.requireNonNullElse(borderColor, DEFAULT_BORDERS_AND_DIAGONALS_COLOR);
         this.drawBorders = drawBorders;
         this.diagonalColor = Objects.requireNonNullElse(diagonalColor, DEFAULT_BORDERS_AND_DIAGONALS_COLOR);
@@ -44,8 +44,8 @@ public abstract class MinimalPanel extends JPanel {
 
     //
     @Override
-    protected void paintComponent(@NotNull Graphics g) {
-        super.paintComponent(g);
+    public void paint(@NotNull Graphics g) {
+        super.paint(g);
         mainPaint(g);
         finalPaint(g);
     }
@@ -72,5 +72,9 @@ public abstract class MinimalPanel extends JPanel {
         g.setColor(diagonalColor);
         g.drawLine(0, 0, width, height);
         g.drawLine(0, height, width, 0);
+    }
+
+    public void printSizeToConsole(@NotNull String message) {
+        printLine(message + " size: " + getWidth() + " x " + getHeight());
     }
 }
