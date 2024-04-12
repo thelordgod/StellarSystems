@@ -11,10 +11,10 @@ public abstract class SpacecraftModule {
     private final @NotNull Color color; // for graphical purposes
 
     //
-    protected SpacecraftModule(@NotNull String name, int size) {
+    protected SpacecraftModule(@NotNull String name, int size, @NotNull Color color) {
         this.name = name;
         this.size = size;
-        color = Color.green;
+        this.color = color;
     }
 
     //

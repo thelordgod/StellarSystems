@@ -16,11 +16,20 @@ public class Test3 extends GraphicalTest {
 
     //
     public static void main(String[] args) {
+        //adds 2 structural modules
+        PLAYER.addShipPart(new StructuralModule());
+        PLAYER.addShipPart(new StructuralModule());
+
+        //adds 3 test modules
         PLAYER.addShipPart(new TestModule());
         PLAYER.addShipPart(new TestModule());
         PLAYER.addShipPart(new TestModule());
+
+        //adds 2 ships
         PLAYER.addShip(new Spacecraft("Ship 1", new StructuralModule()));
         PLAYER.addShip(new Spacecraft("Ship 2", new StructuralModule()));
+
+        //creates the player with some starting money
         new Test3(PLAYER);
     }
 

@@ -29,8 +29,8 @@ public class Spacecraft {
 
     //gets the total size of the ship
     public int getSize() {
-        //TODO: improve this
-        return core.getSize();
+        //TODO: improve this and remove the "+10"
+        return core.getSize() + 10;
     }
 
     //for graphical purposes
