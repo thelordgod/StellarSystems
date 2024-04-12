@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import commonGraphics.panels.MinimalPanel;
+import test3.models.Spacecraft;
 import test3.player.PaintMode;
 import test3.player.Player;
 
@@ -75,18 +76,14 @@ final class MainPanel extends MinimalPanel {
 
     private void paintMode_shipyard(@NotNull Graphics g) {
         setDrawDiagonals(false);
-        int @NotNull [] drawCenter = new int [] {getWidth() / 2, getHeight() / 2};
-        paintShip(g, drawCenter);
-    }
-
-    private void paintShip(@NotNull Graphics g, int @NotNull [] location) {
-        @NotNull Color color = Color.green;
-        int size = 50;
-        int @NotNull [] drawStart = new int [] {
-                location[0] - size / 2,
-                location[1] - size / 2};
-        g.setColor(color);
-        g.drawRect(drawStart[0], drawStart[1], size, size);
+        @NotNull List<@NotNull Spacecraft> ships = player.getOwnedShips();
+        int shipCount = ships.size();
+        int gap = getWidth() / (shipCount + 1);
+        int @NotNull [] firstShipLocation = new int [] {gap, getHeight() / 2};
+        for (int i = 0; i < shipCount; i++) {
+            @NotNull Spacecraft ship = ships.get(i);
+            ShipPainter.paintShip(g, ship, new int [] {firstShipLocation[0] + gap * i, firstShipLocation[1]});
+        }
     }
 
     private void paintMode_missions(@NotNull Graphics g) {

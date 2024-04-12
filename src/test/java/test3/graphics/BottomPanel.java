@@ -54,30 +54,22 @@ final class BottomPanel extends FixedHorizontalPanel {
         int @NotNull [] partDrawLocation = new int [] {100, 100};
         int
                 partSeparation = 160,
-                infoY = 180, textOffsetX = -15;
+                infoY = 180, textOffsetX = -40;
         @NotNull List<@NotNull SpacecraftModule> partInventory = player.getShipPartInventory();
         for (int i = 0; i < partInventory.size(); i++) {
             @NotNull SpacecraftModule part = partInventory.get(i);
             int partX = partDrawLocation[0] + partSeparation * i;
-            paintShipPart(g, part, new int [] {partX, partDrawLocation[1]});
+            ShipPartPainter.paintShipPart(g, part, new int [] {partX, partDrawLocation[1]});
             paintPartInfo(g, part, new int [] {partX + textOffsetX, infoY});
         }
-    }
-
-    private void paintShipPart(@NotNull Graphics g, @NotNull SpacecraftModule part, int @NotNull [] location) {
-        @NotNull Color partColor = Color.green;
-        int size = 50;
-        int @NotNull [] drawStart = new int [] {location[0] - size / 2, location[1] - size / 2};
-        g.setColor(partColor);
-        g.drawRect(drawStart[0], drawStart[1], size, size);
     }
 
     private void paintPartInfo(@NotNull Graphics g, @NotNull SpacecraftModule part, int @NotNull [] location) {
         int textHeight = 15;
         g.setColor(TEXT_COLOR);
         drawStringList(g, location, textHeight, new ArrayList<>() {{
-            add("Part: ");
-            add("coming soon");
+            add(part.getName());
+            //add more part info lines here
         }});
     }
 
