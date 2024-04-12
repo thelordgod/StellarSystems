@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import graphicalTestAbstraction.GraphicalTest;
 import test3.models.TestModule;
+import test3.models.CoreModule;
 import test3.models.Spacecraft;
 import test3.player.Player;
 import test3.graphics.Window;
@@ -18,7 +19,7 @@ public class Test3 extends GraphicalTest {
         PLAYER.addShipPart(new TestModule());
         PLAYER.addShipPart(new TestModule());
         PLAYER.addShipPart(new TestModule());
-        PLAYER.addShip(new Spacecraft());
+        PLAYER.addShip(new Spacecraft(new CoreModule()));
         new Test3(PLAYER);
     }
 

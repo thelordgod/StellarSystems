@@ -13,7 +13,7 @@ import test3.models.SpacecraftModule;
 import test3.player.Player;
 
 //
-public class BottomPanel extends FixedHorizontalPanel {
+final class BottomPanel extends FixedHorizontalPanel {
     private static final int PANEL_HEIGHT = 300;
     private static final @NotNull Color TEXT_COLOR = Color.white;
     private final @NotNull Player player;

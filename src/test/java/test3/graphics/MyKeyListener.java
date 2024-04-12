@@ -7,7 +7,7 @@ import test3.player.PaintMode;
 import test3.player.Player;
 
 //
-public final class MyKeyListener extends AbstractKeyListener {
+final class MyKeyListener extends AbstractKeyListener {
     private final @NotNull Player player;
 
     //
@@ -30,9 +30,9 @@ public final class MyKeyListener extends AbstractKeyListener {
     @Override
     public void keyActionSwitch_byText(@NotNull String keyText) throws UndefinedKeyActionException {
         switch (keyText) {
-            case "1" -> player.setPaintMode(PaintMode.FLIGHT);
-            case "2" -> player.setPaintMode(PaintMode.SHIPYARD);
-            case "3" -> player.setPaintMode(PaintMode.MISSIONS);
+            case "F1" -> player.setPaintMode(PaintMode.FLIGHT);
+            case "F2" -> player.setPaintMode(PaintMode.SHIPYARD);
+            case "F3" -> player.setPaintMode(PaintMode.MISSIONS);
             default -> throw new UndefinedKeyActionException();
         }
     }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import commonGraphics.ColorUtils;
 
 //
-public class PanelPalette {
+final class PanelPalette {
     @SuppressWarnings("FieldMayBeFinal")
     private @NotNull Color
             mainBackground, panelBackground,
