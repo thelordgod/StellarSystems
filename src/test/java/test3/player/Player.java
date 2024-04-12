@@ -5,8 +5,10 @@ import java.util.ArrayList;
 
 import org.jetbrains.annotations.NotNull;
 
-import test3.models.Spacecraft;
+import test3.models.WrongModuleTypeException;
 import test3.models.SpacecraftModule;
+import test3.models.StructuralModule;
+import test3.models.Spacecraft;
 
 //
 public class Player {
@@ -45,6 +47,21 @@ public class Player {
     //
     public void addShipPart(@NotNull SpacecraftModule part) {
         shipPartInventory.add(part);
+    }
+
+    //
+    public void createNewShip(int partInventoryIndex) throws WrongModuleTypeException {
+        try {
+            @NotNull SpacecraftModule part = shipPartInventory.get(partInventoryIndex);
+            if (part instanceof StructuralModule core) {
+                addShip(new Spacecraft("New ship", core));
+                shipPartInventory.remove(partInventoryIndex);
+            } else {
+                throw new WrongModuleTypeException();
+            }
+        } catch (@NotNull IndexOutOfBoundsException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // for graphical purposes

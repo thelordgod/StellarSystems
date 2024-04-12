@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import static consoleUtils.SimplePrinting.printLine;
 
 import commonGraphics.panels.FixedHorizontalPanel;
+import test3.models.WrongModuleTypeException;
 import test3.models.SpacecraftModule;
 import test3.player.Player;
 
@@ -36,6 +37,10 @@ final class BottomPanel extends FixedHorizontalPanel {
         addMouseListener(mouseListener);
         mouseMotionListener = new BottomPanelMouseMotionListener();
         addMouseMotionListener(mouseMotionListener);
+    }
+
+    @NotNull Player getPlayer() {
+        return player;
     }
 
     //
@@ -124,6 +129,11 @@ final class BottomPanel extends FixedHorizontalPanel {
             int activePart = panel.getActivePart();
             if (activePart >= 0) {
                 printLine("Part number " + activePart);
+                try {
+                    panel.getPlayer().createNewShip(activePart);
+                } catch (@NotNull WrongModuleTypeException exception) {
+                    printLine(exception.getMessage());
+                }
             }
         }
 
